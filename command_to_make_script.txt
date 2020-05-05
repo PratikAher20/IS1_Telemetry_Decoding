@@ -1,0 +1,5 @@
+### Open cmd in the folder containing the script file ###
+
+pyinstaller --onefile -w Inspire_Telemetry_Decoder_v2.py
+
+### Choose correct version of the Python Script
