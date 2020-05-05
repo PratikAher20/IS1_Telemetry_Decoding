@@ -65,15 +65,53 @@ for j in range(0, len(list_packets), 1):
 # This function performs a polynomial conversion on the level 0 data
 # Can be extended to do other types of conversions
 def performConversion(var,conversion):
-    C0=(float(conversion[3:10]))
+
+    C0_minus_flag = 0
+    C1_minus_flag = 0
+    C2_minus_flag = 0
+    C3_minus_flag = 0
+
+    if(conversion[3]=='-'):
+        C0=-(float(conversion[4:11]))
+        C0_minus_flag = 1
+    else:
+        C0 = (float(conversion[3:10]))
+    if (len(conversion) <= 12):
+        convertedVar = C0
+        return convertedVar
 
     if(conversion[15]=='-'):
-        C1 = -(float(conversion[16:23]))
+        if(C0_minus_flag == 0):
+            C1 = -(float(conversion[16:23]))
+        else:
+            C1 = -(float(conversion[17:24]))
+        C1_minus_flag=1
     else:
-        C1 = (float(conversion[15:22]))
+        if (C0_minus_flag == 0):
+            C1 = (float(conversion[15:22]))
+        else:
+            C1 = (float(conversion[16:23]))
 
-    convertedVar = C0+C1*var
-    return convertedVar
+    if ( 12 < len(conversion) <= 24):
+        convertedVar = C0+C1*var
+        return convertedVar
+
+    if(conversion[27]=='-'):
+        if(C1_minus_flag == 0):
+            C2 = -(float(conversion[28:35]))
+        else:
+            C2 = -(float(conversion[29:36]))
+        C2_minus_flag=1
+    else:
+        if (C1_minus_flag == 0):
+            C2 = (float(conversion[27:34]))
+        else:
+            C2 = (float(conversion[28:35]))
+
+    if ( 24 < len(conversion) <= 36):
+        print("here")
+        convertedVar = C0+C1*var+C2*var*var
+        return convertedVar
 
 packet_header_array = []
 packet_decoded_array = []
