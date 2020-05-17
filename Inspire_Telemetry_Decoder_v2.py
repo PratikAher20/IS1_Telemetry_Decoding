@@ -11,6 +11,8 @@ with open("packet_apids.csv",'r') as f:
         list_temp.append([])
         # Empty List for level 1 decoded telemetry
         list_temp.append([])
+        # Empty list for packet definations
+        list_temp.append([])
         list_packets.append(list(list_temp))
 
 # Creating a list of integers from the raw output file from Hydra
@@ -42,25 +44,22 @@ for j in range(0, len(list_packets), 1):
             for row in list_packets[j][2]:
                 writer.writerow(row)
 
-# Code to implement packet decoding
-# Reading the packet telemetry defination from the csv file
-# This csv file must be in a predefined format for the code to work
-packet_def = []
-with open("beacon_pckt_def.csv",'r') as f:
+#Reading the packet definations from the  packet_def.csv file
+packets_def = []
+with open("packet_def.csv",'r') as f:
     reader = csv.DictReader(f)
     for row in reader:
         list_temp = []
         for key, value in row.items():
             list_temp.append(value)
-        packet_def.append(list(list_temp))
+        packets_def.append(list(list_temp))
 
-# Reading the apid from the packet defination csv and finding the
-# Corresponding level 2 data array created previously
-packet_decode_apid = (int(packet_def[1][1]))
-for j in range(0, len(list_packets), 1):
-    if(packet_decode_apid == int(list_packets[j][1])):
-        packet_raw_array = list_packets[j][2]
-        packet_decode_number = j
+#Arranging the definations as an array according to APIDs in the list_packets
+for m in range(0, len(packets_def), 1):
+    curr_packet_apid = (int(packets_def[m][1]))
+    for n in range(0, len(list_packets), 1):
+        if (curr_packet_apid == int(list_packets[n][1])):
+            list_packets[n][4].append(list(packets_def[m]))
 
 # This function performs a polynomial conversion on the level 0 data
 # Can be extended to do other types of conversions
@@ -109,61 +108,100 @@ def performConversion(var,conversion):
             C2 = (float(conversion[28:35]))
 
     if ( 24 < len(conversion) <= 36):
-        print("here")
         convertedVar = C0+C1*var+C2*var*var
         return convertedVar
 
-packet_header_array = []
-packet_decoded_array = []
-decoded_array_index = 0
 
-# This part of the code is used to decode the "type" of the
-# Level 0 data to get the Level 1 variables
-for i in range(0,len(packet_raw_array),1):
-    for j in range(0,len(packet_def),1):
-        # Collecting the 1st Row which has the variable name
-        if(i==0):
-            packet_header_array.append(packet_def[j][0])
 
-        # Implementing decoding - combining bytes
-        type = packet_def[j][2]
-        conversion = packet_def[j][3]
-        if(type=='U8' or type=='D8' or type=='I8' or type=='F8' ):
-            var = packet_raw_array[i][decoded_array_index]
-            if(conversion == ''):
-                packet_decoded_array.append(var)
-            else:
-                packet_decoded_array.append(performConversion(var,conversion))
-            decoded_array_index += 1
+#Now implementing the level 1 conversions for also level 0 packets read
+for a in range(0, len(list_packets), 1):
+    if(len(list_packets[a][2])>0):
+        # Perform the level 1 conversions first
+        cur_packet_decode_apid = int(list_packets[a][1])
+        curr_packet_raw_array = list_packets[a][2]
+        curr_packet_def = list_packets[a][4]
 
-        elif(type=='U16' or type=='D16' or type=='I16' or type=='F16'):
-            var = 256*packet_raw_array[i][decoded_array_index+1]+packet_raw_array[i][decoded_array_index]
-            if (conversion == ''):
-                packet_decoded_array.append(var)
-            else:
-                packet_decoded_array.append(performConversion(var,conversion))
-            decoded_array_index += 2
+        curr_packet_decode_number = a
+        curr_packet_header_array = []
+        curr_packet_decoded_array = []
+        curr_decoded_array_index = 0
 
-        elif(type=='U32' or type=='D32' or type=='I32' or type=='F32'):
-            var = 256*256*256*packet_raw_array[i][decoded_array_index+3] \
-                                                        + 256*256*packet_raw_array[i][decoded_array_index + 2]\
-                                                        + 256*packet_raw_array[i][decoded_array_index + 1] \
-                                                        + packet_raw_array[i][decoded_array_index]
-            if(conversion == ''):
-                packet_decoded_array.append(var)
-            else:
-                packet_decoded_array.append(performConversion(var,conversion))
-            decoded_array_index += 4
-        #print(decoded_array_index)
-    list_packets[packet_decode_number][3].append(list(packet_decoded_array))
-    decoded_array_index=0
-    packet_decoded_array=[]
+        for i in range(0, len(curr_packet_raw_array), 1):
+            for j in range(0, len(curr_packet_def), 1):
+                # Collecting the 1st Row which has the variable name
+                if (i == 0):
+                    curr_packet_header_array.append(curr_packet_def[j][0])
 
-# This writes the level 1 data to a csv file
-name_str_l1 = str(list_packets[packet_decode_number][0])+"_level_1.csv"
-with open(name_str_l1, "w") as f:
-    writer = csv.writer(f)
-    writer.writerow(packet_header_array)
-    for row in list_packets[packet_decode_number][3]:
-        writer.writerow(row)
+                # Implementing decoding - combining bytes
+                type = curr_packet_def[j][2]
+                conversion = curr_packet_def[j][3]
+                endian = curr_packet_def[j][4]
+                if (type == 'U8' or type == 'D8' or type == 'I8' or type == 'F8'):
+                    var = curr_packet_raw_array[i][curr_decoded_array_index]
+                    if (conversion == ''):
+                        curr_packet_decoded_array.append(var)
+                    else:
+                        curr_packet_decoded_array.append(performConversion(var, conversion))
+                    curr_decoded_array_index += 1
+
+                elif (type == 'U16' or type == 'D16' or type == 'I16' or type == 'F16'):
+                    if (endian == 'big'):
+                        var = 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] + curr_packet_raw_array[i][
+                            curr_decoded_array_index]
+                    else:
+                        var = 256 * curr_packet_raw_array[i][curr_decoded_array_index] + curr_packet_raw_array[i][
+                            curr_decoded_array_index + 1]
+                    if (conversion == ''):
+                        curr_packet_decoded_array.append(var)
+                    else:
+                        curr_packet_decoded_array.append(performConversion(var, conversion))
+                    curr_decoded_array_index += 2
+
+                elif (type == 'U24' or type == 'D24' or type == 'I24' or type == 'F24'):
+
+                    if (endian == 'big'):
+                        var = 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
+                              + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
+                              + curr_packet_raw_array[i][curr_decoded_array_index]
+                    else:
+                        var = 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index] \
+                              + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
+                              + curr_packet_raw_array[i][curr_decoded_array_index + 2]
+
+                    if (conversion == ''):
+                        curr_packet_decoded_array.append(var)
+                    else:
+                        curr_packet_decoded_array.append(performConversion(var, conversion))
+                    curr_decoded_array_index += 3
+
+                elif (type == 'U32' or type == 'D32' or type == 'I32' or type == 'F32'):
+
+                    if (endian == 'big'):
+                        var = 256 * 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 3] \
+                              + 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
+                              + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
+                              + curr_packet_raw_array[i][curr_decoded_array_index]
+                    else:
+                        var = 256 * 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index] \
+                              + 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
+                              + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
+                              + curr_packet_raw_array[i][curr_decoded_array_index + 3]
+
+                    if (conversion == ''):
+                        curr_packet_decoded_array.append(var)
+                    else:
+                        curr_packet_decoded_array.append(performConversion(var, conversion))
+                    curr_decoded_array_index += 4
+
+            list_packets[curr_packet_decode_number][3].append(list(curr_packet_decoded_array))
+            curr_decoded_array_index = 0
+            curr_packet_decoded_array = []
+
+        # Store the level 1 data in CSV files
+        name_str_l1 = str(list_packets[curr_packet_decode_number][0]) + "_level_1.csv"
+        with open(name_str_l1, "w") as f:
+            writer = csv.writer(f)
+            writer.writerow(curr_packet_header_array)
+            for row in list_packets[curr_packet_decode_number][3]:
+                writer.writerow(row)
 
