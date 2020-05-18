@@ -128,10 +128,6 @@ for a in range(0, len(list_packets), 1):
 
         for i in range(0, len(curr_packet_raw_array), 1):
             for j in range(0, len(curr_packet_def), 1):
-                # Collecting the 1st Row which has the variable name
-                if (i == 0):
-                    curr_packet_header_array.append(curr_packet_def[j][0])
-
                 # Implementing decoding - combining bytes
                 type = curr_packet_def[j][2]
                 conversion = curr_packet_def[j][3]
@@ -143,7 +139,9 @@ for a in range(0, len(list_packets), 1):
                     else:
                         curr_packet_decoded_array.append(performConversion(var, conversion))
                     curr_decoded_array_index += 1
-
+                    # Collecting the 1st Row which has the variable name
+                    if (i == 0):
+                        curr_packet_header_array.append(curr_packet_def[j][0])
                 elif (type == 'U16' or type == 'D16' or type == 'I16' or type == 'F16'):
                     if (endian == 'big'):
                         var = 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] + curr_packet_raw_array[i][
@@ -156,6 +154,9 @@ for a in range(0, len(list_packets), 1):
                     else:
                         curr_packet_decoded_array.append(performConversion(var, conversion))
                     curr_decoded_array_index += 2
+                    # Collecting the 1st Row which has the variable name
+                    if (i == 0):
+                        curr_packet_header_array.append(curr_packet_def[j][0])
 
                 elif (type == 'U24' or type == 'D24' or type == 'I24' or type == 'F24'):
 
@@ -173,6 +174,9 @@ for a in range(0, len(list_packets), 1):
                     else:
                         curr_packet_decoded_array.append(performConversion(var, conversion))
                     curr_decoded_array_index += 3
+                    # Collecting the 1st Row which has the variable name
+                    if (i == 0):
+                        curr_packet_header_array.append(curr_packet_def[j][0])
 
                 elif (type == 'U32' or type == 'D32' or type == 'I32' or type == 'F32'):
 
@@ -192,6 +196,74 @@ for a in range(0, len(list_packets), 1):
                     else:
                         curr_packet_decoded_array.append(performConversion(var, conversion))
                     curr_decoded_array_index += 4
+                    # Collecting the 1st Row which has the variable name
+                    if (i == 0):
+                        curr_packet_header_array.append(curr_packet_def[j][0])
+                elif(type == 'U608'):
+                    for p in range(0,76,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
+
+                elif (type == 'D1600'):
+                    for p in range(0,200,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
+                elif (type == 'U1024'):
+                    for p in range(0,128,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
+                elif (type == 'U1280'):
+                    for p in range(0,160,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
+                elif (type == 'C1920'):
+                    for p in range(0,240,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
+                elif (type == 'C1864'):
+                    for p in range(0,233,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
+                elif (type == 'C184'):
+                    for p in range(0,23,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
+                elif (type == 'U624'):
+                    for p in range(0,78,1):
+                        # Collecting the 1st Row which has the variable name
+                        if (i == 0):
+                            curr_packet_header_array.append(curr_packet_def[j][0])
+                        var = curr_packet_raw_array[i][curr_decoded_array_index]
+                        curr_packet_decoded_array.append(var)
+                        curr_decoded_array_index += 1
 
             list_packets[curr_packet_decode_number][3].append(list(curr_packet_decoded_array))
             curr_decoded_array_index = 0
