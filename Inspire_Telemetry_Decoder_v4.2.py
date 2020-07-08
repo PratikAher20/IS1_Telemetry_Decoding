@@ -1,11 +1,8 @@
 import csv
 import os
-import sys
 from tkinter import filedialog
 from tkinter import *
 from tkinter import ttk
-from pydrive.drive import GoogleDrive
-from pydrive.auth import GoogleAuth
 
 
 LARGE_FONT= ("Verdana", 12)
@@ -34,14 +31,29 @@ def popupmsg(title, msg):
 # This function performs a polynomial conversion on the level 0 data
 # Can be extended to do other types of conversions
 def performConversion(var,conversion):
-    C0 = float(conversion[0])
-    C1 = float(conversion[1])
-    C2 = float(conversion[2])
-    C3 = float(conversion[3])
-    C4 = float(conversion[4])
-    convertedVar = C0 + C1 * var + C2 * var * var + C3 * var * var * var + C4 * var * var * var * var
-    return convertedVar
+    if (conversion[0] == ''):
+        return var
+    else:
+        C0 = float(conversion[0])
+        C1 = float(conversion[1])
+        C2 = float(conversion[2])
+        C3 = float(conversion[3])
+        C4 = float(conversion[4])
+        convertedVar = C0 + C1 * var + C2 * var * var + C3 * var * var * var + C4 * var * var * var * var
+        return convertedVar
 
+def performSignedValues(var, type):
+    variable_type = type[0]
+    #print(variable_type)
+    numbits = int(type[1:])
+    #print(numbits)
+    if(variable_type =='I'):
+        if(var<2**(numbits-1)):
+            return var
+        else:
+            return (var - 2**(numbits))
+    else:
+        return var
 
 def DecodePackets():
     # Opening the file containing a list of different packets and their APIDs
@@ -97,7 +109,7 @@ def DecodePackets():
                 list_packets[j][2].append(list(raw_list[array_index:array_index + packet_length + 7]))
         array_index = array_index + packet_length + 7
 
-    # writing the raw different types of packets to level 0 csv files
+    # creating new level 0 and level 1 folders which would contain the decoded files
     l0_directory = "Level 0 Packets"
     path_new_l0 = os.path.join(Path, l0_directory)
     os.mkdir(path_new_l0)
@@ -106,6 +118,7 @@ def DecodePackets():
     path_new_l1 = os.path.join(Path, l1_directory)
     os.mkdir(path_new_l1)
 
+    # writing the raw different types of packets to level 0 csv files
     for j in range(0, len(list_packets), 1):
         if (len(list_packets[j][2]) > 0):
             name_str = str(list_packets[j][0]) + "_level_0.csv"
@@ -127,7 +140,7 @@ def DecodePackets():
         if (len(list_packets[a][2]) > 0):
             # Perform the level 1 conversions first
             cur_packet_decode_apid = int(list_packets[a][1])
-            #print("current APID is", cur_packet_decode_apid)
+            print("current APID is", cur_packet_decode_apid)
             curr_packet_raw_array = list_packets[a][2]
             curr_packet_def = list_packets[a][4]
 
@@ -145,10 +158,7 @@ def DecodePackets():
                     endian = curr_packet_def[j][3]
                     if (type == 'U8' or type == 'D8' or type == 'I8' or type == 'F8'):
                         var = curr_packet_raw_array[i][curr_decoded_array_index]
-                        if (conversion[0] == ''):
-                            curr_packet_decoded_array.append(var)
-                        else:
-                            curr_packet_decoded_array.append(performConversion(var, conversion))
+                        curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
                         curr_decoded_array_index += 1
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
@@ -161,10 +171,8 @@ def DecodePackets():
                         else:
                             var = 256 * curr_packet_raw_array[i][curr_decoded_array_index] + curr_packet_raw_array[i][
                                 curr_decoded_array_index + 1]
-                        if (conversion[0] == ''):
-                            curr_packet_decoded_array.append(var)
-                        else:
-                            curr_packet_decoded_array.append(performConversion(var, conversion))
+
+                        curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
                         curr_decoded_array_index += 2
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
@@ -181,10 +189,7 @@ def DecodePackets():
                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
                                   + curr_packet_raw_array[i][curr_decoded_array_index + 2]
 
-                        if (conversion[0] == ''):
-                            curr_packet_decoded_array.append(var)
-                        else:
-                            curr_packet_decoded_array.append(performConversion(var, conversion))
+                        curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
                         curr_decoded_array_index += 3
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
@@ -202,11 +207,7 @@ def DecodePackets():
                                   + 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
                                   + curr_packet_raw_array[i][curr_decoded_array_index + 3]
-
-                        if (conversion[0] == ''):
-                            curr_packet_decoded_array.append(var)
-                        else:
-                            curr_packet_decoded_array.append(performConversion(var, conversion))
+                        curr_packet_decoded_array.append(performSignedValues(performConversion(var, conversion),type))
                         curr_decoded_array_index += 4
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
@@ -331,9 +332,8 @@ text2.tag_bind('follow',
 text2.insert(END,'\nHow to Run\n', 'big')
 quote = """
 This application can be used to generate 
-Level 0 and Level 1 telemetry for INSPIRESat-1.
-Follow the following steps to decode the 
-raw data files obtained from Hydra:
+Level 0 and Level 1 telemetry.Follow the 
+following steps to decode the raw data files:
 
 1. Click File-> Select Folder and Decode Packets
 2. Open the folder containing the Raw Log files
