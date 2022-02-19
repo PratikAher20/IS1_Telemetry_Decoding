@@ -400,7 +400,11 @@ def DecodePacketsSBAND():
 
 
     # Arranging the definations as an array according to APIDs in the list_packets
+    print(len(packets_def))
+    print(packets_def)
     for m in range(0, len(packets_def), 1):
+        #print((packets_def[m][0]))
+        #print((packets_def[m][1]))
         curr_packet_apid = (int(packets_def[m][1]))
         for n in range(0, len(list_packets), 1):
             if (curr_packet_apid == int(list_packets[n][1])):
