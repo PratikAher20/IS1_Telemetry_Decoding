@@ -29,7 +29,7 @@ cip_comstat,1,U32,big,,,,,
 cip_temp1,1,I16,big,0,0.0078125,0,0,0
 cip_temp2,1,I16,big,0,0.0078125,0,0,0
 cip_temp3,1,I16,big,0,0.0078125,0,0,0
-uhf_temp,1,I8,big,,,,,
+uhf_temp,1,I6,big,,,,,
 uhf_config,1,U8,big,,,,,
 sband_pa_curr,1,U16,big,0,0.00004,0,0,0
 sband_pa_volt,1,U16,big,0,0.00004,0,0,0
@@ -55,10 +55,10 @@ adcs_wheel_sp3,1,I16,big,0,0.4,0,0,0
 adcs_body_rt1,1,I32,big,,,,,
 adcs_body_rt2,1,I32,big,,,,,
 adcs_body_rt3,1,I32,big,,,,,
-adcs_body_quat1,1,I32,big,,,,,
-adcs_body_quat2,1,I32,big,,,,,
-adcs_body_quat3,1,I32,big,,,,,
-adcs_body_quat4,1,I32,big,,,,,
+padding,1,I32,big,,,,,
+padding,1,I32,big,,,,,
+padding,1,I32,big,,,,,
+DAXSS Time Stamp (seconds),1,I32,big,,,,,
 daxss_cmd_op,1,U8,big,,,,,
 daxss_cmd_succ,1,U8,big,,,,,
 daxss_cmd_fail,1,U8,big,,,,,
@@ -83,8 +83,8 @@ sp2_curr,1,U16,big,0,0.0005,0,0,0
 sp2_volt,1,U16,big,0,0.001,0,0,0
 sp1_curr,1,U16,big,0,0.0005,0,0,0
 sp1_volt,1,U16,big,0,0.001,0,0,0
-sp0_curr,1,U16,big,0,0.0005,0,0,0
-sp0_volt,1,U16,big,0,0.001,0,0,0
+sp0_curr,1,U16,big,0,0.00125,0,0,0
+sp0_volt,1,U16,big,0,0.00125,0,0,0
 bat_vcell,1,U16,big,,,,,
 gps_12v_2_curr,1,U16,big,0,0.0005,0,0,0
 gps_12v_2_volt,1,U16,big,0,0.001,0,0,0

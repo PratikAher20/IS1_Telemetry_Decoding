@@ -16,7 +16,6 @@ def restart_program():
     python = sys.executable
     os.execl(python, python, * sys.argv)
 
-
 #Creating a Popup Message to show Conversion is Complete
 def popupmsg(title, msg):
     popup = Tk()
@@ -26,7 +25,6 @@ def popupmsg(title, msg):
     B1 = ttk.Button(popup, text="Okay", command = popup.destroy)
     B1.pack()
     popup.mainloop()
-
 
 # This function performs a polynomial conversion on the level 0 data
 # Can be extended to do other types of conversions
@@ -57,6 +55,7 @@ def performSignedValues(var, type):
 
 def DecodePacketsUHF():
     # Opening the file containing a list of different packets and their APIDs
+    global list_packets
     list_packets = []
     with open("packet_apids.csv", 'r') as f:
         reader = csv.DictReader(f)
@@ -134,7 +133,7 @@ def DecodePacketsUHF():
             if (curr_packet_apid == int(list_packets[n][1])):
                 list_packets[n][5].append(list(packets_def[m]))
 
-    # Now implementing the level 1 conversions for also level 0 packets read
+    # Now implementing the level 1 conversions for all level 0 packets read
     for a in range(0, len(list_packets), 1):
         if (len(list_packets[a][3]) > 0):
             # Perform the level 1 conversions first
@@ -156,13 +155,17 @@ def DecodePacketsUHF():
                     conversion = curr_packet_def[j][4:9]
                     # print(conversion)
                     endian = curr_packet_def[j][3]
-                    if (type == 'U8' or type == 'D8' or type == 'I8' or type == 'F8'):
+                    name = curr_packet_def[j][0]
+
+                    if (type == 'U8' or type == 'D8' or type == 'I8' or type == 'F8' or type == 'I6'):
                         var = curr_packet_raw_array[i][curr_decoded_array_index]
                         curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
                         curr_decoded_array_index += 1
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
                             curr_packet_header_array.append(curr_packet_def[j][0])
+
+
                     elif (type == 'U16' or type == 'D16' or type == 'I16' or type == 'F16'):
                         if (endian == 'big'):
                             var = 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] + \
@@ -339,19 +342,27 @@ def DecodePacketsSBAND():
     pkt_cnt = 1
     actual_pckt_len = 0
     check_flag = 0
-    while (array_index < len(raw_list)):
+
+
+    while (array_index + 5 < len(raw_list)):
         packet_header = int(raw_list[array_index])
         packet_apid = int(raw_list[array_index + 1])
         packet_length = 256 * raw_list[array_index + 4] + raw_list[array_index + 5]
-        #print("Header",packet_header," Number", pkt_cnt, "APID", packet_apid,"Length",packet_length)
 
+        if(array_index==0):
+            print("Header", packet_header, " Number", pkt_cnt, "APID", packet_apid, "Length", packet_length)
+            print(int(list_packets[0][1]))
+            print( int(list_packets[0][2]))
 
         if (packet_header != 8):
             array_index += 1
             continue
 
+
+
         for j in range(0, len(list_packets), 1):
             if ( packet_apid == int(list_packets[j][1]) and packet_length == int(list_packets[j][2])):
+                print("Header", packet_header, " Number", pkt_cnt, "APID", packet_apid, "Length", packet_length)
                 list_packets[j][3].append(list(raw_list[array_index:array_index + packet_length + 9])) #7
                 actual_pckt_len = int(list_packets[j][2])
                 check_flag = 0
@@ -365,7 +376,7 @@ def DecodePacketsSBAND():
             continue
 
         array_index = array_index + actual_pckt_len + 9  # 7
-        print("Header", packet_header, " Number", pkt_cnt, "APID", packet_apid, "Length", packet_length)
+
 
         pkt_cnt += 1
 
@@ -557,6 +568,7 @@ def DecodePacketsSBAND():
                     writer.writerow(row)
 
     popupmsg("Success","Done! SBAND Level 0 and Level 1 Packets Created")
+
 
 def About():
     popupmsg("About","INSPIRE Telemetry Decoder Version 5, Created by: Anant "

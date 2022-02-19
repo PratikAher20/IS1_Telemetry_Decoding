@@ -1,9 +1,0 @@
-1. Copy the IS1_Telemetry_Decoder.exe file into any suitable folder. 
-2. Make sure that "packet_apids.csv", is present in the same folder. This file should contain list of all packets 
-their APIDs 
-3. Make sure that "beacon_pckt_def.csv", is present in the same folder. This file should contain details of the 
-telemetry values in the beacon packet
-2. Copy the hydra log file to be decoded into that same folder.
-3. Rename the hydra log file to "hydra_log".
-4. Run the IS1_Telemetry_Decoder.exe application
-5. The different .csv files(for different packets, level 0 and level 1) will be generated in the same folder. 
