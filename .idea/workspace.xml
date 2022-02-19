@@ -20,9 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="25d6b38b-2687-4076-acc2-9f3685eb53f4" name="Default Changelist" comment="Added Version 5 Executable file to repository.">
-      <change beforePath="$PROJECT_DIR$/Inspire_Telemetry_Decoder_v5.exe" beforeDir="false" afterPath="$PROJECT_DIR$/Inspire_Telemetry_Decoder_v5.exe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Inspire_Telemetry_Decoder_v5.py" beforeDir="false" afterPath="$PROJECT_DIR$/Inspire_Telemetry_Decoder_v5.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packet_def.csv" beforeDir="false" afterPath="$PROJECT_DIR$/packet_def.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

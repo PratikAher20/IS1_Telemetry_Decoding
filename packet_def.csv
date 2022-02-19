@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Name,APID,Type,Endian,Conversion_C0,Conversion_C1,Conversion_C2,Conversion_C3,Conversion_C4
 CCSDS_Header_1_APID,1,U16,little,,,,,
 CCSDS_Header_2_Seq,1,U16,little,,,,,
@@ -1424,7 +1423,7 @@ l0_adc_box_temp,54,U16,big,,,,,
 l0_cmd_time,54,U32,big,,,,,
 l0_boot_sel,54,D32,big,,,,,
 l0_sync,54,U32,big,,,,,
-=======
+=======,,,,,,,,
 Name,APID,Type,Endian,Conversion_C0,Conversion_C1,Conversion_C2,Conversion_C3,Conversion_C4
 CCSDS_Header_1_APID,1,U16,little,,,,,
 CCSDS_Header_2_Seq,1,U16,little,,,,,
@@ -2850,4 +2849,4 @@ l0_adc_box_temp,54,U16,big,,,,,
 l0_cmd_time,54,U32,big,,,,,
 l0_boot_sel,54,D32,big,,,,,
 l0_sync,54,U32,big,,,,,
->>>>>>> e9cc763ad3c4e0c14860ae58a17174050a55aa5d
+>>>>>>> e9cc763ad3c4e0c14860ae58a17174050a55aa5d,,,,,,,,
