@@ -1,0 +1,61 @@
+---
+runtime:
+  mission: inspire
+  test: False
+  debug: True
+  verbose: True
+  epoch: 12/31/1999-23:59:23
+
+# Credentials for a postgres DB used to track downloaded satnogs data.
+# If a DB is not provided then ALL mission data will be downloaded every run.
+database:
+  postgresql:
+    prod:
+      enabled: False
+      dbname: cute
+      user: user
+      password: foo
+      port: 5432
+      host: cute-sds-vm
+  key: bct_tai_seconds
+
+# Satnogs DB setup.
+# Set Norad ID to id of space craft.
+# Set token to the API token for a user.
+satnogs:
+  prod:
+    enabled: True
+    db_api_base_url: https://db.satnogs.org/api/telemetry/
+    token: 659fe8a159ce133295bc828f23f2a8a745656668
+    norad_id: 51657
+  test:
+    enabled: False
+    db_api_base_url: https://db.satnogs.org/api/telemetry/
+    token: user_token_here
+    norad_id: 51657
+
+cleaning:
+  prod:
+    enabled: True
+    min_time: 12/10/2018-00:00:00
+  test:
+    enabled: False
+    min_time: 12/10/2018-00:00:00
+
+# Output directories for processed satnogs files
+satnogs_rawfiles:
+  prod:
+    location:
+      - C:/Users/Anant/Desktop/IS-1_Post_Flight_19022022/On-Orbit Data/SatNogs
+  test:
+    location:
+      - /cute/raw_files/satnogs/to_process/
+
+process_log:
+  prod:
+    location: /csim/data_processing/processed_file_log.txt
+    enabled: True
+  test:
+    location: /csim/data_processing/processed_file_log.txt
+    enabled: False
+...

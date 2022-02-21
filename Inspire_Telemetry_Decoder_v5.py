@@ -3,6 +3,9 @@ import os
 from tkinter import filedialog
 from tkinter import *
 from tkinter import ttk
+from satnogs.satnogs import Satnogs
+import cubeds
+import argparse
 
 
 LARGE_FONT= ("Verdana", 12)
@@ -330,17 +333,27 @@ def batchDecodePackets():
     root = Tk()
     root.withdraw()
     Path = filedialog.askdirectory()
-    Path = Path + "/"
-    filelist = os.listdir(Path)
-    for i in filelist:
-        with open(Path + i, 'rb') as f:
-            byte = f.read(1)
-            while byte:
-                raw_list.append(int(ord(byte)))
+    total_files = 0
+    for path, subdirs, filelist in os.walk(Path):
+        for name in filelist:
+            total_files += 1
+            with open(path + "/" + name, 'rb') as f:
                 byte = f.read(1)
+                while byte:
+                    raw_list.append(int(ord(byte)))
+                    byte = f.read(1)
+
+    #Path = Path + "/"
+    #filelist = os.listdir(Path)
+    #for i in filelist:
+    #    with open(Path + i, 'rb') as f:
+    #        byte = f.read(1)
+    #        while byte:
+    #            raw_list.append(int(ord(byte)))
+    #            byte = f.read(1)
 
     #If only one raw file is present, add filename as prefix to output
-    if (len(filelist)==1):
+    if (total_files==1):
         out_file_prefix = filelist[0] + "_"
     else:
         out_file_prefix = ""
@@ -570,6 +583,63 @@ def batchDecodePackets():
 
     popupmsg("Success","Done! Level 0 and Level 1 Packets Created")
 
+
+# -------------- HELPER FUNCTIONS FOR THIS SATNOGS DOWNLOAD FUNCTION----------------------------------------------------
+def parse_command_line_args():
+    # Parsing command line arguments
+    parser = argparse.ArgumentParser(description='Command Line Parser')
+
+    parser.add_argument('-t', '--test', action="store_true", help="If present, program will be run in test mode")
+    parser.add_argument('-d', '--debug', action="store_true", help="If present, program will be run in debug mode")
+    parser.add_argument('-v', '--verbose', action="store_true", help="If present, program will be run in verbose mode")
+    parser.add_argument('-m', '--mission', type=str, help="Specify specific mission using this parameter")
+    parser.add_argument('-c', '--config', type=str,
+                        help="Specifies what config file to use. If absent, cfg/example.cfg will be used")
+
+    args = parser.parse_args()  # test bool will be stored in args.test
+    return args
+
+#Adding Support for downloading data from satnogs
+def downloadSatnogsFile():
+    args = parse_command_line_args()
+
+    # Check if user set the config file command line argument. If so, extract it. This argument should
+    # really always be used, unless "example.cfg" is changed to be something else.
+    if args.config:
+        config_file = args.config  # user specified config file
+    else:
+        config_file = 'cfg/default_config.yml'  # example config file
+
+    # Load the config info from the file specified. Will get exception if file does not exist.
+    config = cubeds.config.Config(file=config_file)
+
+    # SETUP runtime parameters.
+    if int(config.config['runtime']['verbose']):
+        verbose = True
+    elif args.verbose:
+        verbose = True
+    else:
+        verbose = False
+
+    if int(config.config['runtime']['test']):
+        test = True
+    elif args.test:
+        test = True
+    else:
+        test = False
+
+    if int(config.config['runtime']['debug']):
+        debug = True
+    elif args.debug:
+        debug = True
+    else:
+        debug = False
+
+    nogs = Satnogs(config)
+    nogs.save_satnogs_data()
+
+    popupmsg("Success", "Satnogs Data Downloaded")
+
 def About():
     popupmsg("About","INSPIRE Telemetry Decoder Version 5, Created by: Anant "
                      "\nSource Code: https://github.com/anant-infinity/IS1_Temeletry_Decoding.git")
@@ -580,8 +650,12 @@ root.title("INSPIRE Telemetry Decoder v5")
 menu = Menu(root)
 root.config(menu=menu)
 filemenu = Menu(menu)
-menu.add_cascade(label="File", menu=filemenu)
+menu.add_cascade(label="Decode", menu=filemenu)
 filemenu.add_command(label="Select Folder and Decode Files", command=batchDecodePackets)
+
+downloadmenu = Menu(menu)
+menu.add_cascade(label="Download Raw Files", menu=downloadmenu)
+downloadmenu.add_command(label="Download Satnogs Raw File", command=downloadSatnogsFile)
 
 helpmenu = Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)

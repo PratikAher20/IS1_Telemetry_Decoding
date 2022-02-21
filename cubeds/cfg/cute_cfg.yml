@@ -1,0 +1,84 @@
+---
+runtime:
+  mission: cute
+  test: False
+  debug: True
+  verbose: True
+  epoch: 12/31/1999-23:59:23
+
+
+database:
+  postgresql:
+    prod:
+      enabled: True
+      dbname: cute
+      user: cute_foo
+      password: foo
+      port: 5432
+      host: cute-sds-vm
+    test:
+      enabled: True
+      dbname: cute
+      user: cute_foo
+      password: foo
+      port: 5432
+      host: cute-sds-vm
+  key: bct_tai_seconds
+
+
+ingest_stats:
+  prod:
+    text_file:
+      enabled: True
+    std_out:
+      enabled: True
+    slack:
+      enabled: False
+      key: xoxb-462801636821-509499870758-Kar1nBNWQGRCqt2PSMjiP1Hn​
+      channel: cube-ds-stats
+  test:
+    text_file:
+      enabled: False
+    std_out:
+      enabled: True
+    slack:
+      enabled: False
+      key: api-bot-token
+      channel: development
+
+satnogs:
+  prod:
+    enabled: True
+    db_api_base_url: https://db.satnogs.org/api/telemetry/
+    token: 30c27f3fa1f2411bad6a620474e1dcbc0e8dd55c
+    norad_id: 49263
+  test:
+    enabled: False
+    db_api_base_url: https://db.satnogs.org/api/telemetry/
+    token: 30c27f3fa1f2411bad6a620474e1dcbc0e8dd55c
+    norad_id: 49263
+
+cleaning:
+  prod:
+    enabled: True
+    min_time: 12/10/2018-00:00:00
+  test:
+    enabled: False
+    min_time: 12/10/2018-00:00:00
+
+satnogs_rawfiles:
+  prod:
+    location:
+      - /Users/chamblim/Desktop/CUBESATS/CUTE/CUTE_data/satnogs/
+  test:
+    location:
+      - /cute/raw_files/satnogs/to_process/
+
+process_log:
+  prod:
+    location: /csim/data_processing/processed_file_log.txt
+    enabled: True
+  test:
+    location: /csim/data_processing/processed_file_log.txt
+    enabled: False
+...
