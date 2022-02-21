@@ -22,8 +22,6 @@
     <list default="true" id="25d6b38b-2687-4076-acc2-9f3685eb53f4" name="Default Changelist" comment="Added Version 5 Executable file to repository.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Inspire_Telemetry_Decoder_v5.py" beforeDir="false" afterPath="$PROJECT_DIR$/Inspire_Telemetry_Decoder_v5.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/is_1_handbook.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/is_1_handbook.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packet_def.csv" beforeDir="false" afterPath="$PROJECT_DIR$/packet_def.csv" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,11 +34,6 @@
         <option value="Python Script" />
       </list>
     </option>
-  </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>packet_decode_number</find>
-    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -56,27 +49,6 @@
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RunManager" selected="Python.Inspire_Telemetry_Decoder_v5">
-    <configuration name="Inspire_Telemetry_Decoder_v4" type="PythonConfigurationType" factoryName="Python" temporary="true">
-      <module name="IS1_Temeletry_Decoding" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\Anant\PycharmProjects\IS1_Temeletry_Decoding\Inspire_Telemetry_Decoder_v4.2.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="Inspire_Telemetry_Decoder_v4.1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="IS1_Temeletry_Decoding" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -161,20 +133,41 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="IS1_Temeletry_Decoding" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/cubesat_satnogs/cubesat_satnogs" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/cubesat_satnogs/cubesat_satnogs/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <list>
-      <item itemvalue="Python.Inspire_Telemetry_Decoder_v4" />
       <item itemvalue="Python.Inspire_Telemetry_Decoder_v4.1" />
       <item itemvalue="Python.Inspire_Telemetry_Decoder_v4.2" />
       <item itemvalue="Python.Inspire_Telemetry_Decoder_v4.3" />
       <item itemvalue="Python.Inspire_Telemetry_Decoder_v5" />
+      <item itemvalue="Python.main" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.Inspire_Telemetry_Decoder_v5" />
+        <item itemvalue="Python.main" />
         <item itemvalue="Python.Inspire_Telemetry_Decoder_v4.3" />
         <item itemvalue="Python.Inspire_Telemetry_Decoder_v4.2" />
         <item itemvalue="Python.Inspire_Telemetry_Decoder_v4.1" />
-        <item itemvalue="Python.Inspire_Telemetry_Decoder_v4" />
       </list>
     </recent_temporary>
   </component>
@@ -339,29 +332,30 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1643740597368" />
-    <state width="1899" height="359" key="GridCell.Tab.0.bottom" timestamp="1645263656179">
+    <state width="1899" height="172" key="GridCell.Tab.0.bottom" timestamp="1645414093177">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1515" height="153" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1642795408245" />
-    <state width="1899" height="359" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1645263656179" />
-    <state width="1899" height="359" key="GridCell.Tab.0.center" timestamp="1645263656179">
+    <state width="1899" height="172" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1645414093177" />
+    <state width="1899" height="172" key="GridCell.Tab.0.center" timestamp="1645414093177">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1515" height="153" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1642795408244" />
-    <state width="1899" height="359" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1645263656179" />
-    <state width="1899" height="359" key="GridCell.Tab.0.left" timestamp="1645263656179">
+    <state width="1899" height="172" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1645414093177" />
+    <state width="1899" height="172" key="GridCell.Tab.0.left" timestamp="1645414093177">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1515" height="153" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1642795408244" />
-    <state width="1899" height="359" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1645263656179" />
-    <state width="1899" height="359" key="GridCell.Tab.0.right" timestamp="1645263656179">
+    <state width="1899" height="172" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1645414093177" />
+    <state width="1899" height="172" key="GridCell.Tab.0.right" timestamp="1645414093177">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="1515" height="153" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1642795408245" />
-    <state width="1899" height="359" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1645263656179" />
-    <state x="277" y="57" key="SettingsEditor" timestamp="1642794211296">
-      <screen x="0" y="0" width="1536" height="824" />
+    <state width="1899" height="172" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1645414093177" />
+    <state x="346" y="72" key="SettingsEditor" timestamp="1645379665672">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1642794211296" />
+    <state x="346" y="72" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1645379665672" />
   </component>
 </project>
