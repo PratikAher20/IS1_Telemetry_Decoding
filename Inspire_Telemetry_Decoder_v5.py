@@ -343,15 +343,6 @@ def batchDecodePackets():
                     raw_list.append(int(ord(byte)))
                     byte = f.read(1)
 
-    #Path = Path + "/"
-    #filelist = os.listdir(Path)
-    #for i in filelist:
-    #    with open(Path + i, 'rb') as f:
-    #        byte = f.read(1)
-    #        while byte:
-    #            raw_list.append(int(ord(byte)))
-    #            byte = f.read(1)
-
     #If only one raw file is present, add filename as prefix to output
     if (total_files==1):
         out_file_prefix = filelist[0] + "_"

@@ -52,9 +52,9 @@ adcs_sun_vec3,1,I16,big,0,0.0001,0,0,0
 adcs_wheel_sp1,1,I16,big,0,0.4,0,0,0
 adcs_wheel_sp2,1,I16,big,0,0.4,0,0,0
 adcs_wheel_sp3,1,I16,big,0,0.4,0,0,0
-adcs_body_rt1,1,I32,big,,,,,
-adcs_body_rt2,1,I32,big,,,,,
-adcs_body_rt3,1,I32,big,,,,,
+adcs_body_rt1,1,I32,big,0,0.000000005,0,0,0
+adcs_body_rt2,1,I32,big,0,0.000000005,0,0,0
+adcs_body_rt3,1,I32,big,0,0.000000005,0,0,0
 padding,1,I32,big,,,,,
 padding,1,I32,big,,,,,
 padding,1,I32,big,,,,,
