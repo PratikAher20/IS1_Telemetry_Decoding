@@ -685,15 +685,28 @@ This application can be used to generate
 Level 0 and Level 1 telemetry.Follow the 
 following steps to decode the raw data files:
 
-1. Click File-> Select Folder and Decode Packets
-2. Open the folder containing the Raw Log files
+1. Click Decode-> Select Folder and Decode Packets
+2. Open the folder (/directory) containing the Raw Log files
 
 Done! Decoded Level 0 and Level 1 Packets will be
 created in the same folder (as the raw files)
 
-NOTE: The "packet_apids.csv" and the 
+NOTE 1: The "packet_apids.csv" and the 
 "beacon_pckt_def.csv"  must be present in the 
 folder containing the decoder application.
+
+NOTE 2: The application is capable of selecting a directory containing multiple 
+directories that have raw telemetry files. User must ensure that only telemetry 
+files are present in all directories. If only one file is present in the directory
+the decoded Level-0 and Level-1 files will contain the input file's name as a prefix.
+
+This application also contains a Utility (created by James Mason) to download latest 
+telemetry from Satnogs. To do this:
+
+1. Click Download Raw Files
+2. Download SatNogs Raw File
+
+Further instructions of setting this up are provided in the ReadMe.
 
 """
 text2.insert(END, quote, 'color')
