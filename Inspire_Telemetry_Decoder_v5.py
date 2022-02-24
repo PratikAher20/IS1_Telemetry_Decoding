@@ -45,10 +45,12 @@ def performConversion(var,conversion):
 
 def performSignedValues(var, type):
     variable_type = type[0]
-    #print(variable_type)
+    print(variable_type)
     numbits = int(type[1:])
-    #print(numbits)
+    print(numbits)
     if(variable_type =='I'):
+        if (numbits == 32):
+            print("hello")
         if(var<2**(numbits-1)):
             return var
         else:
@@ -455,6 +457,7 @@ def batchDecodePackets():
                                 curr_decoded_array_index + 1]
 
                         curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
+
                         curr_decoded_array_index += 2
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
@@ -472,6 +475,7 @@ def batchDecodePackets():
                                   + curr_packet_raw_array[i][curr_decoded_array_index + 2]
 
                         curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
+
                         curr_decoded_array_index += 3
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
@@ -489,7 +493,11 @@ def batchDecodePackets():
                                   + 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
                                   + curr_packet_raw_array[i][curr_decoded_array_index + 3]
-                        curr_packet_decoded_array.append(performSignedValues(performConversion(var, conversion),type))
+                        #curr_packet_decoded_array.append(performSignedValues(performConversion(var, conversion),type))
+
+                        #Corrected code
+                        curr_packet_decoded_array.append(performConversion(performSignedValues(var, type),conversion))
+
                         curr_decoded_array_index += 4
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
