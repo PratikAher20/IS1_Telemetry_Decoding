@@ -45,12 +45,8 @@ def performConversion(var,conversion):
 
 def performSignedValues(var, type):
     variable_type = type[0]
-    print(variable_type)
     numbits = int(type[1:])
-    print(numbits)
     if(variable_type =='I'):
-        if (numbits == 32):
-            print("hello")
         if(var<2**(numbits-1)):
             return var
         else:
@@ -668,7 +664,7 @@ text1.image_create(END, image=photo)
 text1.pack(side=LEFT)
 
 
-text2 = Text(root, height=30, width=55)
+text2 = Text(root, height=30, width=70)
 scroll = Scrollbar(root, command=text2.yview)
 text2.configure(yscrollcommand=scroll.set)
 text2.tag_configure('bold_italics', font=('Verdana', 12, 'bold', 'italic'))
@@ -695,18 +691,8 @@ NOTE 1: The "packet_apids.csv" and the
 "beacon_pckt_def.csv"  must be present in the 
 folder containing the decoder application.
 
-NOTE 2: The application is capable of selecting a directory containing multiple 
-directories that have raw telemetry files. User must ensure that only telemetry 
-files are present in all directories. If only one file is present in the directory
-the decoded Level-0 and Level-1 files will contain the input file's name as a prefix.
-
-This application also contains a Utility (created by James Mason) to download latest 
-telemetry from Satnogs. To do this:
-
-1. Click Download Raw Files
-2. Download SatNogs Raw File
-
-Further instructions of setting this up are provided in the ReadMe.
+Further instructions of setting up are
+provided in the ReadMe.
 
 """
 text2.insert(END, quote, 'color')
