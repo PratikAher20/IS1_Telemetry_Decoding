@@ -424,7 +424,7 @@ def automatedDecode():
 
 #Function to schedule and run automated decoding
 def automateDecodeSchedule():
-    #TODO Fix this
+    #TODO Decide Time and Set Here
     x = datetime.datetime.today()
     y = x.replace(day=x.day, hour=19, minute=30, second=0, microsecond=0) + timedelta(hours=24)
     delta_t = y - x
