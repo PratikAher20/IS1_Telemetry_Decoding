@@ -6,11 +6,17 @@ from tkinter import ttk
 from satnogs.satnogs import Satnogs
 import cubeds
 import argparse
-
+import datetime
+from datetime import timedelta
+from threading import Timer
+import time
 
 LARGE_FONT= ("Verdana", 12)
 NORM_FONT= ("Verdana", 10)
 SMALL_FONT= ("Verdana", 8)
+
+def get_current_date_time():
+    return datetime.datetime.now()
 
 def restart_program():
     """Restarts the current program.
@@ -54,252 +60,8 @@ def performSignedValues(var, type):
     else:
         return var
 
-#OLD Function
-# def DecodePacketsUHF():
-#     # Opening the file containing a list of different packets and their APIDs
-#     global list_packets
-#     list_packets = []
-#     with open("packet_apids.csv", 'r') as f:
-#         reader = csv.DictReader(f)
-#         for row in reader:
-#             list_temp = []
-#             for key, value in row.items():
-#                 list_temp.append(value)
-#             # Empty List for level 0 decoded telemetry
-#             list_temp.append([])
-#             # Empty List for level 1 decoded telemetry
-#             list_temp.append([])
-#             # Empty list for packet definations
-#             list_temp.append([])
-#             list_packets.append(list(list_temp))
-#
-#     # Reading the packet definations from the  packet_def.csv file
-#     packets_def = []
-#     with open("packet_def.csv", 'r') as f:
-#         reader = csv.DictReader(f)
-#         for row in reader:
-#             list_temp = []
-#             for key, value in row.items():
-#                 list_temp.append(value)
-#             packets_def.append(list(list_temp))
-#
-#     raw_list = []
-#     # Opening multiple hydra log files
-#     root = Tk()
-#     root.withdraw()
-#     Path = filedialog.askdirectory()
-#     Path = Path + "/"
-#     filelist = os.listdir(Path)
-#     for i in filelist:
-#         # print(i[0])
-#         if (i[0] == 'c'):
-#             with open(Path + i, 'rb') as f:
-#                 while True:
-#                     byte = f.read(1)
-#                     if not byte:
-#                         break
-#                     raw_list.append(int(ord(byte)))
-#
-#     # Scanning through the list to look for different types of packets
-#     array_index = 0
-#     while (array_index < len(raw_list)):
-#         packet_apid = raw_list[array_index + 1]
-#         packet_length = 256 * raw_list[array_index + 4] + raw_list[array_index + 5]
-#         for j in range(0, len(list_packets), 1):
-#             if (packet_apid == int(list_packets[j][1])):
-#                 list_packets[j][3].append(list(raw_list[array_index:array_index + packet_length + 7]))
-#         array_index = array_index + packet_length + 7
-#
-#     # creating new level 0 and level 1 folders which would contain the decoded files
-#     l0_directory = "Level 0 Packets"
-#     path_new_l0 = os.path.join(Path, l0_directory)
-#     os.mkdir(path_new_l0)
-#
-#     l1_directory = "Level 1 Packets"
-#     path_new_l1 = os.path.join(Path, l1_directory)
-#     os.mkdir(path_new_l1)
-#
-#     # writing the raw different types of packets to level 0 csv files
-#     for j in range(0, len(list_packets), 1):
-#         if (len(list_packets[j][3]) > 0):
-#             name_str = str(list_packets[j][0]) + "_level_0.csv"
-#             with open(path_new_l0 + "/" + name_str, "w") as f:
-#                 writer = csv.writer(f)
-#                 for row in list_packets[j][2]:
-#                     writer.writerow(row)
-#
-#     # Arranging the definations as an array according to APIDs in the list_packets
-#     for m in range(0, len(packets_def), 1):
-#         curr_packet_apid = (int(packets_def[m][1]))
-#         for n in range(0, len(list_packets), 1):
-#             if (curr_packet_apid == int(list_packets[n][1])):
-#                 list_packets[n][5].append(list(packets_def[m]))
-#
-#     # Now implementing the level 1 conversions for all level 0 packets read
-#     for a in range(0, len(list_packets), 1):
-#         if (len(list_packets[a][3]) > 0):
-#             # Perform the level 1 conversions first
-#             cur_packet_decode_apid = int(list_packets[a][1])
-#             print("current APID is", cur_packet_decode_apid)
-#             curr_packet_raw_array = list_packets[a][3]
-#             curr_packet_actual_len = list_packets[a][2]
-#             curr_packet_def = list_packets[a][5]
-#
-#             curr_packet_decode_number = a
-#             curr_packet_header_array = []
-#             curr_packet_decoded_array = []
-#             curr_decoded_array_index = 0
-#
-#             for i in range(0, len(curr_packet_raw_array), 1):
-#                 for j in range(0, len(curr_packet_def), 1):
-#                     # Implementing decoding - combining bytes
-#                     type = curr_packet_def[j][2]
-#                     conversion = curr_packet_def[j][4:9]
-#                     # print(conversion)
-#                     endian = curr_packet_def[j][3]
-#                     name = curr_packet_def[j][0]
-#
-#                     if (type == 'U8' or type == 'D8' or type == 'I8' or type == 'F8' or type == 'I6'):
-#                         var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                         curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
-#                         curr_decoded_array_index += 1
-#                         # Collecting the 1st Row which has the variable name
-#                         if (i == 0):
-#                             curr_packet_header_array.append(curr_packet_def[j][0])
-#
-#
-#                     elif (type == 'U16' or type == 'D16' or type == 'I16' or type == 'F16'):
-#                         if (endian == 'big'):
-#                             var = 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] + \
-#                                   curr_packet_raw_array[i][
-#                                       curr_decoded_array_index]
-#                         else:
-#                             var = 256 * curr_packet_raw_array[i][curr_decoded_array_index] + curr_packet_raw_array[i][
-#                                 curr_decoded_array_index + 1]
-#
-#                         curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
-#                         curr_decoded_array_index += 2
-#                         # Collecting the 1st Row which has the variable name
-#                         if (i == 0):
-#                             curr_packet_header_array.append(curr_packet_def[j][0])
-#
-#                     elif (type == 'U24' or type == 'D24' or type == 'I24' or type == 'F24'):
-#
-#                         if (endian == 'big'):
-#                             var = 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
-#                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
-#                                   + curr_packet_raw_array[i][curr_decoded_array_index]
-#                         else:
-#                             var = 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index] \
-#                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
-#                                   + curr_packet_raw_array[i][curr_decoded_array_index + 2]
-#
-#                         curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
-#                         curr_decoded_array_index += 3
-#                         # Collecting the 1st Row which has the variable name
-#                         if (i == 0):
-#                             curr_packet_header_array.append(curr_packet_def[j][0])
-#
-#                     elif (type == 'U32' or type == 'D32' or type == 'I32' or type == 'F32'):
-#
-#                         if (endian == 'big'):
-#                             var = 256 * 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 3] \
-#                                   + 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
-#                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
-#                                   + curr_packet_raw_array[i][curr_decoded_array_index]
-#                         else:
-#                             var = 256 * 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index] \
-#                                   + 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
-#                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
-#                                   + curr_packet_raw_array[i][curr_decoded_array_index + 3]
-#                         curr_packet_decoded_array.append(performSignedValues(performConversion(var, conversion), type))
-#                         curr_decoded_array_index += 4
-#                         # Collecting the 1st Row which has the variable name
-#                         if (i == 0):
-#                             curr_packet_header_array.append(curr_packet_def[j][0])
-#                     elif (type == 'U608'):
-#                         for p in range(0, 76, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#
-#                     elif (type == 'D1600'):
-#                         for p in range(0, 200, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#                     elif (type == 'U1024'):
-#                         for p in range(0, 128, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#                     elif (type == 'U1280'):
-#                         for p in range(0, 160, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#                     elif (type == 'C1920'):
-#                         for p in range(0, 240, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#                     elif (type == 'U1672'):
-#                         for p in range(0, 209, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#                     elif (type == 'U376'):
-#                         for p in range(0, 23, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#                     elif (type == 'U624'):
-#                         for p in range(0, 78, 1):
-#                             # Collecting the 1st Row which has the variable name
-#                             if (i == 0):
-#                                 curr_packet_header_array.append(curr_packet_def[j][0])
-#                             var = curr_packet_raw_array[i][curr_decoded_array_index]
-#                             curr_packet_decoded_array.append(var)
-#                             curr_decoded_array_index += 1
-#
-#                 list_packets[curr_packet_decode_number][4].append(list(curr_packet_decoded_array))
-#                 curr_decoded_array_index = 0
-#                 curr_packet_decoded_array = []
-#
-#             # Store the level 1 data in CSV files
-#             name_str_l1 = str(list_packets[curr_packet_decode_number][0]) + "_level_1.csv"
-#             with open(path_new_l1 + "/" + name_str_l1, "w", newline='') as f:
-#                 writer = csv.writer(f)
-#                 writer.writerow(curr_packet_header_array)
-#                 for row in list_packets[curr_packet_decode_number][4]:
-#                     writer.writerow(row)
-#
-#     popupmsg("Success", "Done! Level 0 and Level 1 Packets Created")
-
-#New Batch decode function
-
-def batchDecodePackets():
+#Load Packet APIDs
+def loadPacketAPIDs():
     # Opening the file containing a list of different packets and their APIDs
     list_packets = []
     with open("packet_apids.csv", 'r') as f:
@@ -315,8 +77,10 @@ def batchDecodePackets():
             # Empty list for packet definations
             list_temp.append([])
             list_packets.append(list(list_temp))
+    return list_packets
 
-    # Reading the packet definations from the  packet_def.csv file
+#Load Packet Definitions
+def loadPacketDefs():
     packets_def = []
     with open("packet_def.csv", 'r') as f:
         reader = csv.DictReader(f)
@@ -325,12 +89,16 @@ def batchDecodePackets():
             for key, value in row.items():
                 list_temp.append(value)
             packets_def.append(list(list_temp))
+    return packets_def
 
+def loadRawDataUser():
+    array_to_return = []
     raw_list = []
     # Opening multiple hydra log files
     root = Tk()
     root.withdraw()
     Path = filedialog.askdirectory()
+    array_to_return.append(Path)
     total_files = 0
     for path, subdirs, filelist in os.walk(Path):
         for name in filelist:
@@ -340,12 +108,42 @@ def batchDecodePackets():
                 while byte:
                     raw_list.append(int(ord(byte)))
                     byte = f.read(1)
-
+    array_to_return.append(raw_list)
     #If only one raw file is present, add filename as prefix to output
     if (total_files==1):
         out_file_prefix = filelist[0] + "_"
     else:
         out_file_prefix = ""
+    array_to_return.append(out_file_prefix)
+    return array_to_return
+
+def loadRawDataAutomated():
+    array_to_return = []
+    raw_list = []
+    Path = r"C:\Users\Anant\Desktop\On-Orbit_Data_03032022\On-Orbit_Raw_Data"
+    array_to_return.append(r"C:\Users\Anant\Desktop\On-Orbit_Data_03032022\On-Orbit_Processed_Data")
+    total_files = 0
+    for path, subdirs, filelist in os.walk(Path):
+        for name in filelist:
+            total_files += 1
+            with open(path + "/" + name, 'rb') as f:
+                byte = f.read(1)
+                while byte:
+                    raw_list.append(int(ord(byte)))
+                    byte = f.read(1)
+    array_to_return.append(raw_list)
+    #If only one raw file is present, add filename as prefix to output
+    if (total_files==1):
+        out_file_prefix = filelist[0] + "_"
+    else:
+        out_file_prefix = ""
+    array_to_return.append(out_file_prefix)
+    return array_to_return
+
+#Parse and decode packets
+def parseanddecode(list_packets,packets_def,raw_data_array):
+
+    raw_list = raw_data_array[1]
 
     # Scanning through the list to look for different types of packets
     array_index = 0
@@ -353,7 +151,7 @@ def batchDecodePackets():
     actual_pckt_len = 0
     check_flag = 0
 
-
+    #Extracting level-0 packets from raw data
     while (array_index + 5 < len(raw_list)):
         packet_header = int(raw_list[array_index])
         packet_apid = int(raw_list[array_index + 1])
@@ -364,15 +162,14 @@ def batchDecodePackets():
             continue
 
         for j in range(0, len(list_packets), 1):
-            if ( packet_apid == int(list_packets[j][1]) and packet_length == int(list_packets[j][2])):
+            if (packet_apid == int(list_packets[j][1]) and packet_length == int(list_packets[j][2])):
                 print("Header", packet_header, " Number", pkt_cnt, "APID", packet_apid, "Length", packet_length)
-                list_packets[j][3].append(list(raw_list[array_index:array_index + packet_length + 7])) #7
+                list_packets[j][3].append(list(raw_list[array_index:array_index + packet_length + 7]))  # 7
                 actual_pckt_len = int(list_packets[j][2])
                 check_flag = 0
                 break
             else:
                 check_flag = 1
-
 
         if (check_flag == 1):
             array_index += 1
@@ -381,29 +178,8 @@ def batchDecodePackets():
         array_index = array_index + actual_pckt_len + 7  # 7
         pkt_cnt += 1
 
-    # creating new level 0 and level 1 folders which would contain the decoded files
-    l0_directory = "Level 0 Packets"
-    path_new_l0 = os.path.join(Path, l0_directory)
-    os.mkdir(path_new_l0)
-
-    l1_directory = "Level 1 Packets"
-    path_new_l1 = os.path.join(Path, l1_directory)
-    os.mkdir(path_new_l1)
-
-    # writing the raw different types of packets to level 0 csv files
-    for j in range(0, len(list_packets), 1):
-        if (len(list_packets[j][3]) > 0):
-            name_str = out_file_prefix + str(list_packets[j][0]) + "_level_0.csv"
-            with open(path_new_l0 +"/"+ name_str, "w") as f:
-                writer = csv.writer(f)
-                for row in list_packets[j][3]:
-                    writer.writerow(row)
-
-
     # Arranging the definations as an array according to APIDs in the list_packets
     for m in range(0, len(packets_def), 1):
-        #print((packets_def[m][0]))
-        #print((packets_def[m][1]))
         curr_packet_apid = (int(packets_def[m][1]))
         for n in range(0, len(list_packets), 1):
             if (curr_packet_apid == int(list_packets[n][1])):
@@ -416,7 +192,7 @@ def batchDecodePackets():
             # Perform the level 1 conversions first
             cur_packet_decode_apid = int(list_packets[a][1])
             print("current APID is", cur_packet_decode_apid)
-            curr_packet_actual_len = int(list_packets[a][2])+7
+            curr_packet_actual_len = int(list_packets[a][2]) + 7
             curr_packet_raw_array = list_packets[a][3]
             curr_packet_def = list_packets[a][5]
 
@@ -434,11 +210,11 @@ def batchDecodePackets():
                     # Implementing decoding - combining bytes
                     type = curr_packet_def[j][2]
                     conversion = curr_packet_def[j][4:9]
-                    #print(conversion)
+                    # print(conversion)
                     endian = curr_packet_def[j][3]
-                    if (type == 'U8' or type == 'D8' or type == 'I8' or type == 'F8' or type =='I6'):
+                    if (type == 'U8' or type == 'D8' or type == 'I8' or type == 'F8' or type == 'I6'):
                         var = curr_packet_raw_array[i][curr_decoded_array_index]
-                        curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
+                        curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
                         curr_decoded_array_index += 1
                         # Collecting the 1st Row which has the variable name
                         if (i == 0):
@@ -452,7 +228,7 @@ def batchDecodePackets():
                             var = 256 * curr_packet_raw_array[i][curr_decoded_array_index] + curr_packet_raw_array[i][
                                 curr_decoded_array_index + 1]
 
-                        curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
+                        curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
 
                         curr_decoded_array_index += 2
                         # Collecting the 1st Row which has the variable name
@@ -470,7 +246,7 @@ def batchDecodePackets():
                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
                                   + curr_packet_raw_array[i][curr_decoded_array_index + 2]
 
-                        curr_packet_decoded_array.append(performConversion( performSignedValues(var,type ),conversion))
+                        curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
 
                         curr_decoded_array_index += 3
                         # Collecting the 1st Row which has the variable name
@@ -489,10 +265,8 @@ def batchDecodePackets():
                                   + 256 * 256 * curr_packet_raw_array[i][curr_decoded_array_index + 1] \
                                   + 256 * curr_packet_raw_array[i][curr_decoded_array_index + 2] \
                                   + curr_packet_raw_array[i][curr_decoded_array_index + 3]
-                        #curr_packet_decoded_array.append(performSignedValues(performConversion(var, conversion),type))
 
-                        #Corrected code
-                        curr_packet_decoded_array.append(performConversion(performSignedValues(var, type),conversion))
+                        curr_packet_decoded_array.append(performConversion(performSignedValues(var, type), conversion))
 
                         curr_decoded_array_index += 4
                         # Collecting the 1st Row which has the variable name
@@ -565,19 +339,100 @@ def batchDecodePackets():
                             curr_decoded_array_index += 1
 
                 list_packets[curr_packet_decode_number][4].append(list(curr_packet_decoded_array))
+
                 curr_decoded_array_index = 0
                 curr_packet_decoded_array = []
 
-            # Store the level 1 data in CSV files
-            name_str_l1 = out_file_prefix + str(list_packets[curr_packet_decode_number][0]) + "_level_1.csv"
-            with open(path_new_l1 +"/"+ name_str_l1, "w", newline='') as f:
+            list_packets[curr_packet_decode_number].append(curr_packet_header_array)
+
+    return list_packets
+
+def storeDecodedPackets(list_packets, raw_data_array):
+
+    Path = raw_data_array[0]
+    out_file_prefix = raw_data_array[2]
+    # Creating main directory with date and time
+    main_directory = "Decoded_Packets_" + str(int(get_current_date_time().strftime("%d%m%Y_%H%M%S")))
+    path_new_main = os.path.join(Path, main_directory)
+    os.mkdir(path_new_main)
+    # creating new level 0 and level 1 folders which would contain the decoded files
+    l0_directory = "Level 0 Packets"
+    path_new_l0 = os.path.join(path_new_main, l0_directory)
+    os.mkdir(path_new_l0)
+
+    l1_directory = "Level 1 Packets"
+    path_new_l1 = os.path.join(path_new_main, l1_directory)
+    os.mkdir(path_new_l1)
+
+    # writing the raw different types of packets to level 0 csv files
+    for j in range(0, len(list_packets), 1):
+        if (len(list_packets[j][3]) > 0):
+            name_str = out_file_prefix + str(list_packets[j][0]) + "_level_0.csv"
+            with open(path_new_l0 + "/" + name_str, "w") as f:
                 writer = csv.writer(f)
-                writer.writerow(curr_packet_header_array)
-                for row in list_packets[curr_packet_decode_number][4]:
+                for row in list_packets[j][3]:
+                    writer.writerow(row)
+            # Store the level 1 data in CSV files
+            name_str_l1 = out_file_prefix + str(list_packets[j][0]) + "_level_1.csv"
+            with open(path_new_l1 + "/" + name_str_l1, "w", newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(list_packets[j][6])
+                for row in list_packets[j][4]:
                     writer.writerow(row)
 
-    popupmsg("Success","Done! Level 0 and Level 1 Packets Created")
+def userDownloadSatnogsFile():
+    downloadSatnogsFile()
+    popupmsg("Success", "Satnogs Data Downloaded")
 
+#New Batch decode function
+def batchDecodePackets():
+    #Load Packet APIDs
+    list_packets = loadPacketAPIDs()
+    # Reading the packet definations from the  packet_def.csv file
+    packets_def = loadPacketDefs()
+    #Load raw data
+    raw_data_array = loadRawDataUser()
+    #Parse and Decode Packets
+    list_packets_decoded = parseanddecode(list_packets, packets_def, raw_data_array)
+    #Store Decoded Packets
+    storeDecodedPackets(list_packets_decoded,raw_data_array)
+
+    popupmsg("Success", "Done! Level 0 and Level 1 Packets Created")
+
+
+def automatedDecode():
+    # Load Packet APIDs
+    print("Running Automation")
+    list_packets = loadPacketAPIDs()
+    # Reading the packet definations from the  packet_def.csv file
+    packets_def = loadPacketDefs()
+    # Empty Satnogs directory
+    SatNogs_dir = r"C:\Users\Anant\Desktop\On-Orbit_Data_03032022\On-Orbit_Raw_Data\SatNogs"
+    for f in os.listdir(SatNogs_dir):
+        os.remove(os.path.join(SatNogs_dir, f))
+    # Download Latest Satnogs Data
+    #downloadSatnogsFile()
+    # Load Row Data Automated
+    raw_data_array = loadRawDataAutomated()
+    # Parse and Decode Packets
+    list_packets_decoded = parseanddecode(list_packets, packets_def, raw_data_array)
+    # Store Decoded Packets
+    storeDecodedPackets(list_packets_decoded, raw_data_array)
+    #Calling Schedular for next day
+    automateDecodeSchedule()
+    return
+
+#Function to schedule and run automated decoding
+def automateDecodeSchedule():
+    #TODO Fix this
+    x = datetime.datetime.today()
+    y = x.replace(day=x.day, hour=19, minute=30, second=0, microsecond=0) + timedelta(hours=24)
+    delta_t = y - x
+
+    secs = delta_t.total_seconds()
+
+    t = Timer(secs, automatedDecode)
+    t.start()
 
 # -------------- HELPER FUNCTIONS FOR THIS SATNOGS DOWNLOAD FUNCTION----------------------------------------------------
 def parse_command_line_args():
@@ -593,6 +448,7 @@ def parse_command_line_args():
 
     args = parser.parse_args()  # test bool will be stored in args.test
     return args
+
 
 #Adding Support for downloading data from satnogs
 def downloadSatnogsFile():
@@ -633,8 +489,6 @@ def downloadSatnogsFile():
     nogs = Satnogs(config)
     nogs.save_satnogs_data()
 
-    popupmsg("Success", "Satnogs Data Downloaded")
-
 def About():
     popupmsg("About","INSPIRE Telemetry Decoder Version 6, Created by: Anant "
                      "\nSource Code: https://github.com/anant-infinity/IS1_Temeletry_Decoding.git")
@@ -650,7 +504,11 @@ filemenu.add_command(label="Select Folder and Decode Files", command=batchDecode
 
 downloadmenu = Menu(menu)
 menu.add_cascade(label="Download Raw Files", menu=downloadmenu)
-downloadmenu.add_command(label="Download Satnogs Raw File", command=downloadSatnogsFile)
+downloadmenu.add_command(label="Download Satnogs Raw File", command=userDownloadSatnogsFile)
+
+automenu = Menu(menu)
+menu.add_cascade(label="Automation", menu=automenu)
+automenu.add_command(label="Automated Decode Latest Packets", command=automateDecodeSchedule)
 
 helpmenu = Menu(menu)
 menu.add_cascade(label="Help", menu=helpmenu)

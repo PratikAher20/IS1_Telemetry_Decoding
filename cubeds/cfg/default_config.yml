@@ -46,7 +46,7 @@ cleaning:
 satnogs_rawfiles:
   prod:
     location:
-      - C:/Users/Anant/Desktop/IS-1_Post_Flight_19022022/On-Orbit Data/SatNogs
+      - C:/Users/Anant/Desktop/On-Orbit_Data_03032022/On-Orbit_Raw_Data/SatNogs
   test:
     location:
       - /cute/raw_files/satnogs/to_process/
