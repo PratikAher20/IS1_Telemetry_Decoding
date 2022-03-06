@@ -43,7 +43,7 @@ adcs_tlm_proc,214,13
 adcs_ext_tracker2,221,114
 adcs_rw_drive,206,150
 adcs_momentum,209,57
-adcs_css,210,52
+adcs_css,210,53
 adcs_mag,211,45
 adcs_command_tlm,200,25
 cip_soh,50,27

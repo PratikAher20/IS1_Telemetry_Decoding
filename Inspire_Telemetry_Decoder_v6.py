@@ -208,6 +208,7 @@ def parseanddecode(list_packets,packets_def,raw_data_array):
 
                 for j in range(0, len(curr_packet_def), 1):
                     # Implementing decoding - combining bytes
+                    print(curr_packet_def[j][0])
                     type = curr_packet_def[j][2]
                     conversion = curr_packet_def[j][4:9]
                     # print(conversion)
