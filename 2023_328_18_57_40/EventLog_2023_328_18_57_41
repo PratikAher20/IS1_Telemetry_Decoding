@@ -1,0 +1,122 @@
+2023/328-18:57:41: <CFG> Missing value for keyword "ADCS_GEN_PKT_ADDR_OFFSET"
+2023/328-18:57:41: <CFG> Decoder memDumpDecoder is already defined
+2023/328-18:57:41: <CFG> Decoder memDumpDecoder is already defined
+2023/328-18:57:41: <CFG> Decoder cmdDecoder is already defined
+2023/328-18:57:41: <HW> ccsdsTlmServer Waiting for connections on port 40052
+2023/328-18:57:41: <HW> ccsdsCmdServer Waiting for connections on port 40053
+2023/328-18:57:41: <HW> ccsdsSimServer Waiting for connections on port 40055
+2023/328-18:57:41: <HW> ccsdsOutTlm Waiting for connections on port 30000
+2023/328-18:57:41: <HW> ccsdsInCmd Waiting for connections on port 30001
+2023/328-18:57:41: <HW> hydraInCmd Waiting for connections on port 30002
+2023/328-18:57:41: <FRA> Frame log_hk Invalid Frame ID: #APID_TLM_LOG_PKT
+2023/328-18:57:41: <HW> uhfSimTlm Waiting for connections on port 50001
+2023/328-18:57:41: <HW> uhfSimCmd Waiting for connections on port 50000
+2023/328-18:57:41: <CFG> ImageMap logoMap file iist_logo.bmp does not exist
+2023/328-18:57:41: <CFG> ImageMap logoMap file sspace_logo.bmp does not exist
+2023/328-18:57:41: <INT> Run Directory: Rundirs/2023_328_18_57_40/
+2023/328-18:57:41: <INT> Writing note to file
+2023/328-18:57:41: <RDR> Auto-starting reader ccsdsCmdReader
+2023/328-18:57:41: <RDR> Starting reader ccsdsCmdReader
+2023/328-18:57:41: <RDR> Auto-starting reader hydraCmdReader
+2023/328-18:57:41: <RDR> Starting reader hydraCmdReader
+2023/328-18:57:41: <RDR> Auto-starting reader tlmReader
+2023/328-18:57:41: <RDR> Starting reader tlmReader
+2023/328-18:57:41: <RDR> Auto-starting reader uhfReader
+2023/328-18:57:41: <RDR> Starting reader uhfReader
+2023/328-18:57:41: <RDR> Auto-starting reader usbReader
+2023/328-18:57:41: <HW> Could not open port COM31 - No such file or directory
+2023/328-18:57:41: <RDR> Starting reader usbReader
+2023/328-18:57:41: <SCR> Starting script in engine 0
+2023/328-18:57:41: <SCR> Starting script init.prc
+2023/328-18:57:41: <HW> Starting new file: EventLog_2023_328_18_57_41
+2023/328-18:57:44: <INT> GOTO UHF
+2023/328-18:57:44: <INT> Starting setup_for_uhf_cmd
+2023/328-18:57:44: <SCR> Starting script in engine 1
+2023/328-18:57:44: <SCR> Starting script setup_for_uhf_cmd
+2023/328-18:57:44: <INT> Setting decoder header frame: cmdDecoder ax25CmdHeader
+2023/328-18:57:45: <CMD> Alias hydra_uart_cmd_disable -> set_dec_output cmdDecoder cmdOutput ALL disable 
+2023/328-18:57:45: <INT> Setting decoder output: cmdDecoder cmdOutput ALL disable
+2023/328-18:57:45: <INT> GOTO END
+2023/328-18:57:45: <CMD> Alias hydra_uhf_cmd_enable -> set_dec_output cmdDecoder ax25Wrapper ALL enable 
+2023/328-18:57:45: <INT> Setting decoder output: cmdDecoder ax25Wrapper ALL enable
+2023/328-18:57:45: <INT> SHOWING PAGE Beacon_Detailed
+2023/328-18:57:45: <CMD> Alias cmd_sync_disable -> cmd_dec cmdOutput disable_header 
+2023/328-18:57:45: <INT> Sending decoder cmdOutput cmd disable_header
+2023/328-18:57:45: <SCR> Done with script init.prc
+2023/328-18:57:45: <SCR> Done with script /home/iist_sdr_gs/IS1_Commissioning/hydra/Scripts/setup_for_uhf_cmd.prc
+2023/328-19:02:18: <HW> uhfSimCmd New connection from 127.0.0.1 on port 50000
+2023/328-19:02:18: <HW> uhfSimTlm New connection from 127.0.0.1 on port 50001
+2023/328-19:11:17: <HW> Starting new file: uhf_2023_328_19_11_17
+2023/328-19:11:17: 2023/328-19:11:17: beacon_uhf_temp <=  15.00, >  35.00 ( =   5.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_sband_top_temp <=  15.00, >  35.00 ( =   0.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_star_temp >  15.00, <=  35.00 ( =  16.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_wheel_temp1 <=  15.00, >  35.00 ( =  11.71 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_wheel_temp2 <=  15.00, >  35.00 ( =   9.19 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_wheel_temp3 <=  15.00, >  35.00 ( =   9.22 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_wheel_sp1 > -1000.00, <= 1000.00 ( = -154.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_wheel_sp2 > -1000.00, <= 1000.00 ( = -531.60 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_wheel_sp3 > -1000.00, <= 1000.00 ( =  44.40 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_body_rt1 >  -5.00, <=   5.00 ( =  -0.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_body_rt2 >  -5.00, <=   5.00 ( =   0.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_adcs_body_rt3 >  -5.00, <=   5.00 ( =  -0.01 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_cdh_curr >   0.22, <=   0.28 ( =   0.26 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_cdh_volt >   3.20, <=   3.50 ( =   3.30 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_sband_curr <=   0.05, >   0.70 ( =   0.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_sband_volt <=   5.75, >   6.25 ( =   0.55 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_uhf_curr >   0.03, <=   0.05 ( =   0.04 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_uhf_volt >   5.75, <=   6.25 ( =   5.99 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_heater_volt <=   1.00, >   9.00 ( =   0.00 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_bat_volt <=   7.60, >   8.20 ( =   8.37 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_obc_temp >  15.00, <=  35.00 ( =  17.92 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_eps_temp >  15.00, <=  35.00 ( =  27.19 )
+
+2023/328-19:11:17: 2023/328-19:11:17: beacon_int_temp >  15.00, <=  35.00 ( =  21.06 )
+
+2023/328-19:11:17: <HW> Starting new file: ccsds_2023_328_19_11_17
+2023/328-19:14:30: <CMD> Sending command cmd_noop 
+2023/328-19:14:50: <CMD> Sending command cmd_noop 
+2023/328-19:15:35: uhfReader length field in header too large: 15240
+2023/328-19:15:35: uhfReader length field in header too large: 23456
+2023/328-19:15:37: uhfReader length field in header too large: 16448
+2023/328-19:16:47: uhfReader length field in header too large: 40191
+2023/328-19:16:47: uhfReader length field in header too large: 48971
+2023/328-19:16:47: uhfReader length field in header too large: 12200
+2023/328-19:16:47: 2023/328-19:16:47: beacon_adcs_star_temp <=  15.00, >  35.00 ( =   0.00 )
+
+2023/328-19:16:47: 2023/328-19:16:47: beacon_cdh_curr <=   0.22, >   0.28 ( =   0.00 )
+
+2023/328-19:16:47: 2023/328-19:16:47: beacon_cdh_volt <=   3.20, >   3.50 ( =   0.00 )
+
+2023/328-19:16:47: 2023/328-19:16:47: beacon_uhf_curr <=   0.03, >   0.05 ( =   0.00 )
+
+2023/328-19:16:47: 2023/328-19:16:47: beacon_uhf_volt <=   5.75, >   6.25 ( =   0.00 )
+
+2023/328-19:16:47: 2023/328-19:16:47: beacon_obc_temp <=  15.00, >  35.00 ( =  91.39 )
+
+2023/328-19:16:47: 2023/328-19:16:47: beacon_eps_temp <=  15.00, >  35.00 ( =  91.39 )
+
+2023/328-19:16:47: 2023/328-19:16:47: beacon_int_temp <=  15.00, >  35.00 ( =  91.39 )
+
+2023/328-19:19:02: <HW> uhfSimTlm client disconnect
+2023/328-19:19:02: <HW> uhfSimCmd client disconnect
