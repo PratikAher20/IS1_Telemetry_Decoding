@@ -389,7 +389,9 @@ def storeOverallDecodedPackets(list_packets, raw_data_array):
     # Creating main directory with date and time
     main_directory = "Overall_data"
     path_new_main = os.path.join(Path, main_directory)
+
     subprocess.run([r"D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\auto.bat"])
+
     os.mkdir(path_new_main)
     # creating new level 0 and level 1 folders which would contain the decoded files
     l0_directory = "Level 0 Packets"
@@ -586,6 +588,7 @@ class MyHandler(FileSystemEventHandler):
                     print("Decoded file: - ", filelist[0])
                     break
             automatedDecode()
+            
 
 
 print("Running Automation")
