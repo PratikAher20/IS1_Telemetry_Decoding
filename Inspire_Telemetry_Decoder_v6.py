@@ -14,10 +14,11 @@ import argparse
 import datetime
 import subprocess
 import sys
-from datetime import timedelta
-from threading import Timer
-from threading import Thread
-import time
+import pandas as pd
+# from datetime import timedelta
+# from threading import Timer
+# from threading import Thread
+# import time
 
 LARGE_FONT= ("Verdana", 12)
 NORM_FONT= ("Verdana", 10)
@@ -382,8 +383,18 @@ def parseanddecode(list_packets,packets_def,raw_data_array):
 
     return list_packets
 
+def sort_packets(Path):
+    if (os.path.isfile(Path + "/" + "beacon_level_1.csv")):
+        dataframe = pd.read_csv(Path + "/" + "beacon_level_1.csv")
+        dataframe.sort_values("DAXSS Time Stamp (seconds)", axis=0, ascending=True, inplace=True)
+        dataframe.to_csv(Path + "/" + "beacon_level_1.csv")
+    if (os.path.isfile(Path + "/" + "daxss_sci_level_1.csv")):
+        dataframe = pd.read_csv(Path + "/" + "beacon_level_1.csv")
+        dataframe.sort_values("SHCOARSE", axis=0, ascending=True, inplace=True)
+        dataframe.to_csv(Path + "/" + "beacon_level_1.csv")
+
+
 def storeOverallDecodedPackets(list_packets, raw_data_array):
-    # print("bhai mai kam kr rha hu")
     Path = raw_data_array[0]
     out_file_prefix = raw_data_array[2]
     # Creating main directory with date and time
@@ -418,6 +429,9 @@ def storeOverallDecodedPackets(list_packets, raw_data_array):
                 for row in list_packets[j][4]:
                     writer.writerow(row)
 
+    sort_packets(path_new_l1)
+
+
 def storeDecodedPackets(list_packets, raw_data_array):
 
     Path = raw_data_array[0]
@@ -450,6 +464,9 @@ def storeDecodedPackets(list_packets, raw_data_array):
                 writer.writerow(list_packets[j][6])
                 for row in list_packets[j][4]:
                     writer.writerow(row)
+    sort_packets(path_new_l1)
+
+
 
 def userDownloadSatnogsFile():
     downloadSatnogsFile()
