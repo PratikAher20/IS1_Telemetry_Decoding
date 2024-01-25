@@ -1,1 +1,1 @@
-RD /S /Q "D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\Processed_Data\Overall_Data"
+RD /S /Q "D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Processed data\Overall_Data"

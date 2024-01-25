@@ -130,9 +130,9 @@ def loadRawDataAutomated():
     array_to_return = []
     raw_list = []
     #D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Raw Data
-    Path = r"D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\test"
+    Path = r"D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Raw Data\IIST"
     # D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Processed data
-    array_to_return.append(r"D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\Processed_Data")
+    array_to_return.append(r"D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Processed data")
     total_files = 0
     for path, subdirs, filelist in os.walk(Path):
         for name in filelist:
@@ -155,16 +155,17 @@ def loadTriggeredRawDataAutomated(event):
     array_to_return = []
     raw_list = []
     total_files = 0
-    array_to_return.append(r"D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\Processed_Data")
+    array_to_return.append(r"D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Processed data")
     for path, dirs, filelist in os.walk(event.src_path, topdown=True):
         for name in filelist:
             total_files += 1
+            if (filelist[0] != "desktop.ini"):
             # if os.path.isfile(path + "/" + name):
-            with open(path + "/" + name, 'rb') as f:
-                byte = f.read(1)
-                while byte:
-                    raw_list.append(int(ord(byte)))
+                with open(path + "/" + name, 'rb') as f:
                     byte = f.read(1)
+                    while byte:
+                        raw_list.append(int(ord(byte)))
+                        byte = f.read(1)
     array_to_return.append(raw_list)
     # If only one raw file is present, add filename as prefix to output
     if (total_files == 1):
@@ -401,35 +402,36 @@ def storeOverallDecodedPackets(list_packets, raw_data_array):
     main_directory = "Overall_data"
     path_new_main = os.path.join(Path, main_directory)
 
-    subprocess.run([r"D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\auto.bat"])
+    subprocess.run([r"C:\Users\S-SPACE\Desktop\Pratik\IS1_Telemetry_Decoding\auto.bat"])
 
-    os.mkdir(path_new_main)
-    # creating new level 0 and level 1 folders which would contain the decoded files
-    l0_directory = "Level 0 Packets"
-    path_new_l0 = os.path.join(path_new_main, l0_directory)
-    os.mkdir(path_new_l0)
+    if(os.path.isdir(path_new_main) == False):
 
-    l1_directory = "Level 1 Packets"
-    path_new_l1 = os.path.join(path_new_main, l1_directory)
-    os.mkdir(path_new_l1)
+        os.mkdir(path_new_main)
+        # creating new level 0 and level 1 folders which would contain the decoded files
+        l0_directory = "Level 0 Packets"
+        path_new_l0 = os.path.join(path_new_main, l0_directory)
+        os.mkdir(path_new_l0)
 
-    # writing the raw different types of packets to level 0 csv files
-    for j in range(0, len(list_packets), 1):
-        if (len(list_packets[j][3]) > 0):
-            name_str = out_file_prefix + str(list_packets[j][0]) + "_level_0.csv"
-            with open(path_new_l0 + "/" + name_str, "w") as f:
-                writer = csv.writer(f)
-                for row in list_packets[j][3]:
-                    writer.writerow(row)
-            # Store the level 1 data in CSV files
-            name_str_l1 = out_file_prefix + str(list_packets[j][0]) + "_level_1.csv"
-            with open(path_new_l1 + "/" + name_str_l1, "w", newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(list_packets[j][6])
-                for row in list_packets[j][4]:
-                    writer.writerow(row)
+        l1_directory = "Level 1 Packets"
+        path_new_l1 = os.path.join(path_new_main, l1_directory)
+        os.mkdir(path_new_l1)
 
-    sort_packets(path_new_l1)
+        # writing the raw different types of packets to level 0 csv files
+        for j in range(0, len(list_packets), 1):
+            if (len(list_packets[j][3]) > 0):
+                name_str = out_file_prefix + str(list_packets[j][0]) + "_level_0.csv"
+                with open(path_new_l0 + "/" + name_str, "w") as f:
+                    writer = csv.writer(f)
+                    for row in list_packets[j][3]:
+                        writer.writerow(row)
+                # Store the level 1 data in CSV files
+                name_str_l1 = out_file_prefix + str(list_packets[j][0]) + "_level_1.csv"
+                with open(path_new_l1 + "/" + name_str_l1, "w", newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(list_packets[j][6])
+                    for row in list_packets[j][4]:
+                        writer.writerow(row)
+        sort_packets(path_new_l1)
 
 
 def storeDecodedPackets(list_packets, raw_data_array):
@@ -589,22 +591,26 @@ def automatedDecode():
     raw_data_array = loadRawDataAutomated()
     list_packets_decoded = parseanddecode(list_packets, packets_def, raw_data_array)
     storeOverallDecodedPackets(list_packets_decoded, raw_data_array)
+
     print("Overll_Data_Updated")
+    print("Running Automation for next Raw Data")
     # t1.join()
     # automatedDecode()
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
-        if event.is_directory:
-            list_packets = loadPacketAPIDs()
-            packets_def = loadPacketDefs()
-            raw_data_array = loadTriggeredRawDataAutomated(event)
-            list_packets_decoded = parseanddecode(list_packets, packets_def, raw_data_array)
-            storeDecodedPackets(list_packets_decoded, raw_data_array)
-            for path, dirs, filelist in os.walk(event.src_path, topdown=True):
-                for name in filelist:
-                    print("Decoded file: - ", filelist[0])
-                    break
-            automatedDecode()
+        if (event.src_path != "D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\test\desktop.ini"):
+            if event.is_directory:
+                list_packets = loadPacketAPIDs()
+                packets_def = loadPacketDefs()
+                raw_data_array = loadTriggeredRawDataAutomated(event)
+                list_packets_decoded = parseanddecode(list_packets, packets_def, raw_data_array)
+                storeDecodedPackets(list_packets_decoded, raw_data_array)
+                for path, dirs, filelist in os.walk(event.src_path, topdown=True):
+                    if(filelist[0] != "desktop.ini"):
+                        for name in filelist:
+                            print("Decoded file: - ", filelist[0])
+                            break
+                automatedDecode()
             
 
 
@@ -612,7 +618,7 @@ print("Running Automation")
 # automatedDecode()
 observer = Observer()
 event_handler = MyHandler()
-observer.schedule(event_handler, path=r'D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\test', recursive=True)
+observer.schedule(event_handler, path=r'D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Raw Data\IIST', recursive=True)
 observer.start()
 try:
     while True:
