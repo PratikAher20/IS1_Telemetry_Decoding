@@ -156,6 +156,7 @@ def loadTriggeredRawDataAutomated(event):
     raw_list = []
     total_files = 0
     array_to_return.append(r"D:\INSPIRESat-1 Data Server\Data_Server\IS1 On-Orbit Data\Processed data")
+    time.sleep(300)
     for path, dirs, filelist in os.walk(event.src_path, topdown=True):
         for name in filelist:
             total_files += 1
@@ -166,6 +167,10 @@ def loadTriggeredRawDataAutomated(event):
                     while byte:
                         raw_list.append(int(ord(byte)))
                         byte = f.read(1)
+            else:
+                time.sleep(300)
+                loadTriggeredRawDataAutomated(event)
+
     array_to_return.append(raw_list)
     # If only one raw file is present, add filename as prefix to output
     if (total_files == 1):
