@@ -603,19 +603,19 @@ def automatedDecode():
     # automatedDecode()
 class MyHandler(FileSystemEventHandler):
     def on_created(self, event):
-        if (event.src_path != "D:\SSAPCE_Lab_Material\Inspire_Telemetry_Decoder_v7\test\desktop.ini"):
-            if event.is_directory:
-                list_packets = loadPacketAPIDs()
-                packets_def = loadPacketDefs()
-                raw_data_array = loadTriggeredRawDataAutomated(event)
-                list_packets_decoded = parseanddecode(list_packets, packets_def, raw_data_array)
-                storeDecodedPackets(list_packets_decoded, raw_data_array)
-                for path, dirs, filelist in os.walk(event.src_path, topdown=True):
-                    if(filelist[0] != "desktop.ini"):
-                        for name in filelist:
-                            print("Decoded file: - ", filelist[0])
-                            break
-                automatedDecode()
+
+        if event.is_directory:
+            list_packets = loadPacketAPIDs()
+            packets_def = loadPacketDefs()
+            raw_data_array = loadTriggeredRawDataAutomated(event)
+            list_packets_decoded = parseanddecode(list_packets, packets_def, raw_data_array)
+            storeDecodedPackets(list_packets_decoded, raw_data_array)
+            for path, dirs, filelist in os.walk(event.src_path, topdown=True):
+                if(filelist[0] != "desktop.ini"):
+                    for name in filelist:
+                        print("Decoded file: - ", filelist[0])
+                        break
+            automatedDecode()
             
 
 
